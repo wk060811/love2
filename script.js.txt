@@ -1,0 +1,102 @@
+// 打字机效果
+new Typed('#typed', {
+  strings: [
+    "自从遇见你 ✨",
+    "我的生活就不再普通 💕",
+    "想和你一直走下去 🌹"
+  ],
+  typeSpeed: 80,
+  backSpeed: 50,
+  loop: true
+});
+
+// 循环副文案
+const texts = [
+  "喜欢你，无关风月 💞",
+  "遇见你，是我的奇迹 🌟",
+  "想和你一起到老 🌸",
+  "世界很大，但我只爱你 💖"
+];
+let idx = 0;
+setInterval(() => {
+  document.getElementById("subText").innerText = texts[idx];
+  idx = (idx+1) % texts.length;
+}, 3000);
+
+// 点击冒心心
+document.addEventListener("click", (e) => {
+  let heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerText = ["❤️","💖","💞","💕","✨","🌸"][Math.floor(Math.random()*6)];
+  heart.style.left = e.clientX + "px";
+  heart.style.top = e.clientY + "px";
+  heart.style.fontSize = Math.random()*20+20 + "px";
+  document.body.appendChild(heart);
+  setTimeout(()=> heart.remove(), 4000);
+});
+
+// 烟花效果
+const canvas = document.getElementById('fireworks');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let fireworks = [];
+
+function Firework(x, y, colors) {
+  this.x = x; this.y = y;
+  this.radius = Math.random()*3+2;
+  this.color = colors[Math.floor(Math.random()*colors.length)];
+  this.angle = Math.random()*2*Math.PI;
+  this.speed = Math.random()*5+2;
+  this.life = 100;
+}
+
+function animateFireworks() {
+  requestAnimationFrame(animateFireworks);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  fireworks.forEach((fw,i)=>{
+    fw.x += Math.cos(fw.angle)*fw.speed;
+    fw.y += Math.sin(fw.angle)*fw.speed;
+    fw.life--;
+    ctx.beginPath();
+    ctx.arc(fw.x,fw.y,fw.radius,0,2*Math.PI);
+    ctx.fillStyle = fw.color;
+    ctx.fill();
+    if(fw.life<=0) fireworks.splice(i,1);
+  });
+}
+animateFireworks();
+
+// 按钮触发庆祝动画
+function celebrate() {
+  let colors = ["#ff4d88","#ffcc00","#00ccff","#66ff66","#ff66ff","#ffffff"];
+  for(let i=0;i<100;i++){
+    fireworks.push(new Firework(window.innerWidth/2, window.innerHeight/2, colors));
+  }
+
+  // 爱心雨
+  for(let i=0;i<80;i++){
+    let heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerText = "💞";
+    heart.style.left = Math.random()*window.innerWidth+"px";
+    heart.style.top = Math.random()*200+"px";
+    heart.style.fontSize = Math.random()*30+20+"px";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),4000);
+  }
+
+  // 中央霓虹 Love
+  let loveText = document.createElement("div");
+  loveText.innerText = "❤️ 我爱你 ❤️";
+  loveText.style.position = "fixed";
+  loveText.style.top = "40%";
+  loveText.style.left = "50%";
+  loveText.style.transform = "translate(-50%,-50%)";
+  loveText.style.fontSize = "3em";
+  loveText.style.color = "white";
+  loveText.style.textShadow = "0 0 20px #ff66ff, 0 0 40px #ff99cc";
+  document.body.appendChild(loveText);
+  setTimeout(()=>loveText.remove(),4000);
+}
